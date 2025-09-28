@@ -1,5 +1,8 @@
 {
   "version": 2,
+  "buildCommand": "./vercel-build.sh",
+  "outputDirectory": "publish/wwwroot",
+  "installCommand": "dotnet restore",
   "builds": [
     {
       "src": "publish/wwwroot/**/*",

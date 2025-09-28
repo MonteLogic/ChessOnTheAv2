@@ -1,0 +1,12 @@
+{
+  "name": "avalonia-wasm-app",
+  "version": "1.0.0",
+  "description": "Avalonia WebAssembly Application",
+  "scripts": {
+    "build": "./vercel-build.sh",
+    "dev": "echo 'Use dotnet run for development'"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
