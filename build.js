@@ -16,9 +16,27 @@ try {
   const dotnetVersion = execSync('dotnet --version', { encoding: 'utf8' }).trim();
   console.log(`✅ .NET version: ${dotnetVersion}`);
   
-  // Restore dependencies
+  // Debug: List current directory contents
+  console.log('📁 Current directory contents:');
+  execSync('ls -la', { stdio: 'inherit' });
+  
+  // Debug: Check if project files exist
+  console.log('🔍 Checking for project files...');
+  if (fs.existsSync('AvaloniaTest.Browser/AvaloniaTest.Browser.csproj')) {
+    console.log('✅ AvaloniaTest.Browser.csproj found');
+  } else {
+    console.log('❌ AvaloniaTest.Browser.csproj not found');
+    console.log('📁 Contents of AvaloniaTest.Browser directory:');
+    try {
+      execSync('ls -la AvaloniaTest.Browser/', { stdio: 'inherit' });
+    } catch (e) {
+      console.log('AvaloniaTest.Browser directory does not exist');
+    }
+  }
+  
+  // Restore dependencies for the specific project
   console.log('📚 Restoring dependencies...');
-  execSync('dotnet restore', { stdio: 'inherit' });
+  execSync('dotnet restore AvaloniaTest.Browser/AvaloniaTest.Browser.csproj', { stdio: 'inherit' });
   
   // Build and publish the WASM project
   console.log('🔨 Building and publishing WASM project...');
