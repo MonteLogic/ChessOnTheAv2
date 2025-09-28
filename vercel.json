@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "buildCommand": "./vercel-build.sh",
+  "buildCommand": "npm run build",
   "outputDirectory": "publish/wwwroot",
-  "installCommand": "dotnet restore",
+  "installCommand": "npm install",
   "rewrites": [
     {
       "source": "/(.*)",
