@@ -1,4 +1,12 @@
-# Ignore everything except the published WASM files
+# Ignore everything except the files needed for building
 *
-!publish/wwwroot/**
+!package.json
+!build.js
 !vercel.json
+!AvaloniaTest.Browser/**
+!AvaloniaTest/**
+!Directory.Build.props
+!Directory.Packages.props
+!AvaloniaTest.sln
+!AvaloniaTest.Browser.csproj
+!AvaloniaTest.csproj
