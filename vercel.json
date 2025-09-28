@@ -3,20 +3,10 @@
   "buildCommand": "./vercel-build.sh",
   "outputDirectory": "publish/wwwroot",
   "installCommand": "dotnet restore",
-  "builds": [
+  "rewrites": [
     {
-      "src": "publish/wwwroot/**/*",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/publish/wwwroot/$1"
-    },
-    {
-      "src": "/",
-      "dest": "/publish/wwwroot/index.html"
+      "source": "/(.*)",
+      "destination": "/$1"
     }
   ],
   "headers": [
