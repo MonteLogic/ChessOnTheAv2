@@ -32,6 +32,14 @@ try {
     } catch (e) {
       console.log('AvaloniaTest.Browser directory does not exist');
     }
+    
+    // Try to find the project file anywhere
+    console.log('🔍 Searching for .csproj files...');
+    try {
+      execSync('find . -name "*.csproj" -type f', { stdio: 'inherit' });
+    } catch (e) {
+      console.log('No .csproj files found');
+    }
   }
   
   // Restore dependencies for the specific project
