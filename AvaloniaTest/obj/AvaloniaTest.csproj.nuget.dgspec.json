@@ -1,0 +1,107 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/monte/Downloads/temp/temp2/ChessOnTheAv2/AvaloniaTest/AvaloniaTest.csproj": {}
+  },
+  "projects": {
+    "/home/monte/Downloads/temp/temp2/ChessOnTheAv2/AvaloniaTest/AvaloniaTest.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/monte/Downloads/temp/temp2/ChessOnTheAv2/AvaloniaTest/AvaloniaTest.csproj",
+        "projectName": "AvaloniaTest",
+        "projectPath": "/home/monte/Downloads/temp/temp2/ChessOnTheAv2/AvaloniaTest/AvaloniaTest.csproj",
+        "packagesPath": "/home/monte/.nuget/packages/",
+        "outputPath": "/home/monte/Downloads/temp/temp2/ChessOnTheAv2/AvaloniaTest/obj/",
+        "projectStyle": "PackageReference",
+        "centralPackageVersionsManagementEnabled": true,
+        "configFilePaths": [
+          "/home/monte/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Avalonia": {
+              "target": "Package",
+              "version": "[11.0.10, )",
+              "versionCentrallyManaged": true
+            },
+            "Avalonia.Diagnostics": {
+              "target": "Package",
+              "version": "[11.0.10, )",
+              "versionCentrallyManaged": true
+            },
+            "Avalonia.Fonts.Inter": {
+              "target": "Package",
+              "version": "[11.0.10, )",
+              "versionCentrallyManaged": true
+            },
+            "Avalonia.Themes.Fluent": {
+              "target": "Package",
+              "version": "[11.0.10, )",
+              "versionCentrallyManaged": true
+            },
+            "CommunityToolkit.Mvvm": {
+              "target": "Package",
+              "version": "[8.4.0, )",
+              "versionCentrallyManaged": true
+            }
+          },
+          "centralPackageVersions": {
+            "Avalonia": "11.0.10",
+            "Avalonia.Android": "11.0.10",
+            "Avalonia.Browser": "11.0.10",
+            "Avalonia.Desktop": "11.0.10",
+            "Avalonia.Diagnostics": "11.0.10",
+            "Avalonia.Fonts.Inter": "11.0.10",
+            "Avalonia.iOS": "11.0.10",
+            "Avalonia.ReactiveUI": "11.0.10",
+            "Avalonia.Themes.Fluent": "11.0.10",
+            "CommunityToolkit.Mvvm": "8.4.0",
+            "Xamarin.AndroidX.Core.SplashScreen": "1.0.1.15"
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/home/monte/.asdf/installs/dotnet/8.0.302/sdk/8.0.302/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
