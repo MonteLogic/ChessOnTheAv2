@@ -7,11 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!--#if (UseCentralPackageManagement) -->
     <PackageReference Include="Avalonia.Browser" />
-    <!--#else -->
-    <PackageReference Include="Avalonia.Browser" Version="$(AvaloniaVersion)" />
-    <!--#endif -->
   </ItemGroup>
 
   <ItemGroup>

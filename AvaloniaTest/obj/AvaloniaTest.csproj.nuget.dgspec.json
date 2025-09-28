@@ -50,6 +50,8 @@
               "versionCentrallyManaged": true
             },
             "Avalonia.Diagnostics": {
+              "include": "None",
+              "suppressParent": "All",
               "target": "Package",
               "version": "[11.0.10, )",
               "versionCentrallyManaged": true

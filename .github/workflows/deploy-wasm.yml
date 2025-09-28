@@ -1,0 +1,117 @@
+name: Deploy Avalonia WASM to Vercel
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [main, master]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+        
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build WASM project
+      run: dotnet build AvaloniaTest.Browser/AvaloniaTest.Browser.csproj -c Release
+      
+    - name: Publish WASM project
+      run: dotnet publish AvaloniaTest.Browser/AvaloniaTest.Browser.csproj -c Release -o ./publish
+      
+    - name: Setup Vercel CLI
+      run: npm install -g vercel@latest
+      
+    - name: Deploy to Vercel
+      env:
+        VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+        VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      run: |
+        # Create vercel.json if it doesn't exist
+        if [ ! -f vercel.json ]; then
+          cat > vercel.json << EOF
+        {
+          "version": 2,
+          "builds": [
+            {
+              "src": "publish/wwwroot/**/*",
+              "use": "@vercel/static"
+            }
+          ],
+          "routes": [
+            {
+              "src": "/(.*)",
+              "dest": "/publish/wwwroot/$1"
+            },
+            {
+              "src": "/",
+              "dest": "/publish/wwwroot/index.html"
+            }
+          ]
+        }
+        EOF
+        fi
+        
+        # Deploy to Vercel
+        vercel --prod --token=$VERCEL_TOKEN --yes
+        
+    - name: Get deployment URL
+      id: get-url
+      run: |
+        # Get the deployment URL from Vercel
+        DEPLOYMENT_URL=$(vercel ls --token=$VERCEL_TOKEN | grep -E 'https://[a-z0-9-]+\.vercel\.app' | head -1 | awk '{print $2}')
+        echo "deployment_url=$DEPLOYMENT_URL" >> $GITHUB_OUTPUT
+        echo "Deployment URL: $DEPLOYMENT_URL"
+        
+    - name: Comment on PR
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const { data: comments } = await github.rest.issues.listComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+          });
+          
+          const botComment = comments.find(comment => 
+            comment.user.type === 'Bot' && 
+            comment.body.includes('🚀 **Avalonia WASM Preview**')
+          );
+          
+          const commentBody = `🚀 **Avalonia WASM Preview**
+          
+          Your Avalonia application has been deployed and is ready for preview!
+          
+          **Preview URL:** ${{ steps.get-url.outputs.deployment_url }}
+          
+          This preview will be automatically updated when you push new commits to this PR.
+          
+          ---
+          *Deployed by GitHub Actions*`;
+          
+          if (botComment) {
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: botComment.id,
+              body: commentBody
+            });
+          } else {
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: commentBody
+            });
+          }

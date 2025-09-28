@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AvaloniaTest.Android")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+66dbcdc72003ae85b2acc9a00d92b428f9e7c599")]
 [assembly: System.Reflection.AssemblyProductAttribute("AvaloniaTest.Android")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AvaloniaTest.Android")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
