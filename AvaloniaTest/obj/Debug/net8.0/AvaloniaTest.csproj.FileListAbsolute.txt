@@ -16,3 +16,4 @@
 /home/monte/Downloads/temp/temp2/ChessOnTheAv2/AvaloniaTest/obj/Debug/net8.0/AvaloniaTest.dll
 /home/monte/Downloads/temp/temp2/ChessOnTheAv2/AvaloniaTest/obj/Debug/net8.0/AvaloniaTest.pdb
 /home/monte/Downloads/temp/temp2/ChessOnTheAv2/AvaloniaTest/obj/Debug/net8.0/ref/AvaloniaTest.dll
+/home/monte/Downloads/temp/temp2/ChessOnTheAv2/AvaloniaTest/obj/Debug/net8.0/AvaloniaTest.sourcelink.json

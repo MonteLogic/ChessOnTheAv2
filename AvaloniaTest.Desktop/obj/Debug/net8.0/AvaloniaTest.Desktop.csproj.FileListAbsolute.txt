@@ -122,3 +122,4 @@
 /home/monte/Downloads/temp/temp2/ChessOnTheAv2/AvaloniaTest.Desktop/obj/Debug/net8.0/AvaloniaTest.Desktop.pdb
 /home/monte/Downloads/temp/temp2/ChessOnTheAv2/AvaloniaTest.Desktop/obj/Debug/net8.0/AvaloniaTest.Desktop.genruntimeconfig.cache
 /home/monte/Downloads/temp/temp2/ChessOnTheAv2/AvaloniaTest.Desktop/obj/Debug/net8.0/ref/AvaloniaTest.Desktop.dll
+/home/monte/Downloads/temp/temp2/ChessOnTheAv2/AvaloniaTest.Desktop/obj/Debug/net8.0/AvaloniaTest.Desktop.sourcelink.json
