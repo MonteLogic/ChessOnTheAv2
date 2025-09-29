@@ -1,7 +1,7 @@
 using UIKit;
 using ChessOnTheAv;
 
-namespace AvaloniaTest.iOS;
+namespace ChessOnTheAv.iOS;
 
 public class Application
 {

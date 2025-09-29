@@ -1,6 +1,6 @@
 {
     "profiles": {
-    "AvaloniaTest.Browser": {
+    "ChessOnTheAv.Browser": {
         "commandName": "Project",
         "launchBrowser": true,
         "environmentVariables": {

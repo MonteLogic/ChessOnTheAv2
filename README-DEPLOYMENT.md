@@ -68,8 +68,8 @@ The GitHub Action performs these steps:
 ChessOnTheAv2/
 ├── .github/workflows/
 │   └── deploy-wasm.yml          # GitHub Actions workflow
-├── AvaloniaTest.Browser/        # WASM target project
-├── AvaloniaTest/                # Shared application code
+├── ChessOnTheAv.Browser/        # WASM target project
+├── ChessOnTheAv/                # Shared application code
 ├── vercel.json                  # Vercel configuration
 ├── .vercelignore               # Vercel ignore file
 └── publish/                    # Generated WASM files (auto-created)
@@ -82,10 +82,10 @@ To test the WASM build locally:
 
 ```bash
 # Build the WASM project
-dotnet build AvaloniaTest.Browser/AvaloniaTest.Browser.csproj -c Release
+dotnet build ChessOnTheAv.Browser/ChessOnTheAv.Browser.csproj -c Release
 
 # Publish for deployment
-dotnet publish AvaloniaTest.Browser/AvaloniaTest.Browser.csproj -c Release -o ./publish
+dotnet publish ChessOnTheAv.Browser/ChessOnTheAv.Browser.csproj -c Release -o ./publish
 
 # The files will be in ./publish/wwwroot/
 ```

@@ -3,10 +3,10 @@
 !package.json
 !build.js
 !vercel.json
-!AvaloniaTest.Browser/**
-!AvaloniaTest/**
+!ChessOnTheAv.Browser/**
+!ChessOnTheAv/**
 !Directory.Build.props
 !Directory.Packages.props
-!AvaloniaTest.sln
-!AvaloniaTest.Browser.csproj
-!AvaloniaTest.csproj
+!ChessOnTheAv.sln
+!ChessOnTheAv.Browser.csproj
+!ChessOnTheAv.csproj

@@ -5,7 +5,7 @@ using Avalonia.ReactiveUI;
 #endif
 using ChessOnTheAv;
 
-namespace AvaloniaTest.Desktop;
+namespace ChessOnTheAv.Desktop;
 
 sealed class Program
 {

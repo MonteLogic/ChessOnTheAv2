@@ -4,13 +4,13 @@
 !build.js
 !netlify.toml
 !netlify-build.sh
-!AvaloniaTest.Browser/**
-!AvaloniaTest/**
+!ChessOnTheAv.Browser/**
+!ChessOnTheAv/**
 !Directory.Build.props
 !Directory.Packages.props
-!AvaloniaTest.sln
-!AvaloniaTest.Browser.csproj
-!AvaloniaTest.csproj
+!ChessOnTheAv.sln
+!ChessOnTheAv.Browser.csproj
+!ChessOnTheAv.csproj
 
 # Ignore build artifacts
 bin/

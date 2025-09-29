@@ -15,6 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AvaloniaTest\AvaloniaTest.csproj" />
+    <ProjectReference Include="..\ChessOnTheAv\ChessOnTheAv.csproj" />
   </ItemGroup>
 </Project>

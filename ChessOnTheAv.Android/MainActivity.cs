@@ -7,10 +7,10 @@ using Avalonia.ReactiveUI;
 #endif
 using ChessOnTheAv;
 
-namespace AvaloniaTest.Android;
+namespace ChessOnTheAv.Android;
 
 [Activity(
-    Label = "AvaloniaTest.Android",
+    Label = "ChessOnTheAv.Android",
     Theme = "@style/MyTheme.NoActionBar",
     Icon = "@drawable/icon",
     MainLauncher = true,
