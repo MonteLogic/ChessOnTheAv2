@@ -1,7 +1,7 @@
 const { execSync } = require('child_process');
 const fs = require('fs');
 
-console.log('🚀 Building Avalonia WASM for Netlify...');
+console.log('🚀 Building ChessOnTheAv WASM for Netlify...');
 
 try {
   // Install .NET 8.0 SDK
@@ -22,15 +22,15 @@ try {
   
   // Debug: Check if project files exist
   console.log('🔍 Checking for project files...');
-  if (fs.existsSync('AvaloniaTest.Browser/AvaloniaTest.Browser.csproj')) {
-    console.log('✅ AvaloniaTest.Browser.csproj found');
+  if (fs.existsSync('ChessOnTheAv.Browser/ChessOnTheAv.Browser.csproj')) {
+    console.log('✅ ChessOnTheAv.Browser.csproj found');
   } else {
-    console.log('❌ AvaloniaTest.Browser.csproj not found');
-    console.log('📁 Contents of AvaloniaTest.Browser directory:');
+    console.log('❌ ChessOnTheAv.Browser.csproj not found');
+    console.log('📁 Contents of ChessOnTheAv.Browser directory:');
     try {
-      execSync('ls -la AvaloniaTest.Browser/', { stdio: 'inherit' });
+      execSync('ls -la ChessOnTheAv.Browser/', { stdio: 'inherit' });
     } catch (e) {
-      console.log('AvaloniaTest.Browser directory does not exist');
+      console.log('ChessOnTheAv.Browser directory does not exist');
     }
     
     // Try to find the project file anywhere
@@ -44,11 +44,11 @@ try {
   
   // Restore dependencies for the specific project
   console.log('📚 Restoring dependencies...');
-  execSync('dotnet restore AvaloniaTest.Browser/AvaloniaTest.Browser.csproj', { stdio: 'inherit' });
+  execSync('dotnet restore ChessOnTheAv.Browser/ChessOnTheAv.Browser.csproj', { stdio: 'inherit' });
   
   // Build and publish the WASM project
   console.log('🔨 Building and publishing WASM project...');
-  execSync('dotnet publish AvaloniaTest.Browser/AvaloniaTest.Browser.csproj -c Release -o ./publish', { stdio: 'inherit' });
+  execSync('dotnet publish ChessOnTheAv.Browser/ChessOnTheAv.Browser.csproj -c Release -o ./publish', { stdio: 'inherit' });
   
   // Verify output
   if (fs.existsSync('./publish/wwwroot/index.html')) {

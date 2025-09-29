@@ -14,7 +14,7 @@ fi
 
 # Check if project builds
 echo "🔨 Testing WASM build..."
-if dotnet build AvaloniaTest.Browser/AvaloniaTest.Browser.csproj -c Release; then
+if dotnet build ChessOnTheAv.Browser/ChessOnTheAv.Browser.csproj -c Release; then
     echo "✅ WASM build successful"
 else
     echo "❌ WASM build failed"
@@ -23,7 +23,7 @@ fi
 
 # Check if publish works
 echo "📤 Testing WASM publish..."
-if dotnet publish AvaloniaTest.Browser/AvaloniaTest.Browser.csproj -c Release -o ./publish; then
+if dotnet publish ChessOnTheAv.Browser/ChessOnTheAv.Browser.csproj -c Release -o ./publish; then
     echo "✅ WASM publish successful"
 else
     echo "❌ WASM publish failed"

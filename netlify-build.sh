@@ -18,12 +18,12 @@ ls -la
 
 # Debug: Check if project files exist
 echo "🔍 Checking for project files..."
-if [ -f "AvaloniaTest.Browser/AvaloniaTest.Browser.csproj" ]; then
-    echo "✅ AvaloniaTest.Browser.csproj found"
+if [ -f "ChessOnTheAv.Browser/ChessOnTheAv.Browser.csproj" ]; then
+    echo "✅ ChessOnTheAv.Browser.csproj found"
 else
-    echo "❌ AvaloniaTest.Browser.csproj not found"
-    echo "📁 Contents of AvaloniaTest.Browser directory:"
-    ls -la AvaloniaTest.Browser/ || echo "AvaloniaTest.Browser directory does not exist"
+    echo "❌ ChessOnTheAv.Browser.csproj not found"
+    echo "📁 Contents of ChessOnTheAv.Browser directory:"
+    ls -la ChessOnTheAv.Browser/ || echo "ChessOnTheAv.Browser directory does not exist"
     
     # Try to find the project file anywhere
     echo "🔍 Searching for .csproj files..."
@@ -32,11 +32,11 @@ fi
 
 # Restore dependencies for the specific project
 echo "📚 Restoring dependencies..."
-dotnet restore AvaloniaTest.Browser/AvaloniaTest.Browser.csproj
+dotnet restore ChessOnTheAv.Browser/ChessOnTheAv.Browser.csproj
 
 # Build and publish the WASM project
 echo "🔨 Building and publishing WASM project..."
-dotnet publish AvaloniaTest.Browser/AvaloniaTest.Browser.csproj -c Release -o ./publish
+dotnet publish ChessOnTheAv.Browser/ChessOnTheAv.Browser.csproj -c Release -o ./publish
 
 # Verify output
 if [ -f "./publish/wwwroot/index.html" ]; then
