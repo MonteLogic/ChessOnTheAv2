@@ -1,7 +1,7 @@
 #!/bin/bash
 
-echo "🧪 Testing Avalonia WASM Deployment Setup"
-echo "========================================"
+echo "🧪 Testing Avalonia WASM Deployment Setup for Netlify"
+echo "====================================================="
 
 # Check if .NET is available
 echo "📦 Checking .NET installation..."
@@ -47,12 +47,12 @@ else
 fi
 
 echo ""
-echo "🎉 All tests passed! Your project is ready for Vercel deployment."
+echo "🎉 All tests passed! Your project is ready for Netlify deployment."
 echo ""
 echo "Next steps:"
 echo "1. Push your code to GitHub"
-echo "2. Set up Vercel project with the settings above"
-echo "3. Add GitHub secrets"
-echo "4. Create a pull request to test the workflow"
+echo "2. Set up Netlify site with the settings above"
+echo "3. Connect your GitHub repository"
+echo "4. Deploy and enjoy your live Avalonia app!"
 echo ""
-echo "Preview URL will be posted automatically on your PR! 🚀"
+echo "Your Avalonia app will be live on Netlify! 🚀"

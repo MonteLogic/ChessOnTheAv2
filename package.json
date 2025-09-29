@@ -4,6 +4,7 @@
   "description": "Avalonia WebAssembly Application",
   "scripts": {
     "build": "node build.js",
+    "netlify-build": "./netlify-build.sh",
     "dev": "echo 'Use dotnet run for development'"
   },
   "engines": {

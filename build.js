@@ -1,7 +1,7 @@
 const { execSync } = require('child_process');
 const fs = require('fs');
 
-console.log('🚀 Building Avalonia WASM for Vercel...');
+console.log('🚀 Building Avalonia WASM for Netlify...');
 
 try {
   // Install .NET 8.0 SDK

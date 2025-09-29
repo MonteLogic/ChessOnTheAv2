@@ -1,0 +1,41 @@
+# Ignore everything except the files needed for building
+*
+!package.json
+!build.js
+!netlify.toml
+!netlify-build.sh
+!AvaloniaTest.Browser/**
+!AvaloniaTest/**
+!Directory.Build.props
+!Directory.Packages.props
+!AvaloniaTest.sln
+!AvaloniaTest.Browser.csproj
+!AvaloniaTest.csproj
+
+# Ignore build artifacts
+bin/
+obj/
+publish/
+*.log
+*.tmp
+
+# Ignore IDE files
+.vs/
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore Git files
+.git/
+.gitignore
+
+# Ignore Vercel files (since we're migrating to Netlify)
+vercel.json
+.vercelignore
+vercel-build.sh
+VERCEL-SETUP.md

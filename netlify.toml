@@ -1,0 +1,57 @@
+[build]
+  # Build command for Netlify
+  command = "npm run build"
+  
+  # Directory where the built files will be located
+  publish = "publish/wwwroot"
+  
+  # Functions directory (if needed)
+  functions = "netlify/functions"
+
+[build.environment]
+  # Node.js version
+  NODE_VERSION = "18"
+  
+  # .NET version (Netlify will install this)
+  DOTNET_VERSION = "8.0"
+
+# Redirect rules for SPA routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Headers for WASM support
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cross-Origin-Embedder-Policy = "require-corp"
+    Cross-Origin-Opener-Policy = "same-origin"
+    Cross-Origin-Resource-Policy = "cross-origin"
+
+# Headers for WASM files specifically
+[[headers]]
+  for = "/_framework/*"
+  [headers.values]
+    Content-Type = "application/wasm"
+    Cross-Origin-Embedder-Policy = "require-corp"
+    Cross-Origin-Opener-Policy = "same-origin"
+    Cross-Origin-Resource-Policy = "cross-origin"
+
+# Headers for .dll files
+[[headers]]
+  for = "*.dll"
+  [headers.values]
+    Content-Type = "application/octet-stream"
+    Cross-Origin-Embedder-Policy = "require-corp"
+    Cross-Origin-Opener-Policy = "same-origin"
+    Cross-Origin-Resource-Policy = "cross-origin"
+
+# Headers for .pdb files
+[[headers]]
+  for = "*.pdb"
+  [headers.values]
+    Content-Type = "application/octet-stream"
+    Cross-Origin-Embedder-Policy = "require-corp"
+    Cross-Origin-Opener-Policy = "same-origin"
+    Cross-Origin-Resource-Policy = "cross-origin"
