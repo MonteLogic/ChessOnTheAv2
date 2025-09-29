@@ -34,7 +34,8 @@ public partial class App : Application
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
-            singleViewPlatform.MainView = new MainView
+            // Use MainWindow for WASM to match Desktop appearance
+            singleViewPlatform.MainView = new MainWindow
             {
                 DataContext = new MainViewModel()
             };

@@ -14,6 +14,7 @@ internal sealed partial class Program
 #if (ReactiveUIToolkitChosen)
             .UseReactiveUI()
 #endif
+            .LogToTrace()
             .StartBrowserAppAsync("out");
 
     public static AppBuilder BuildAvaloniaApp()
