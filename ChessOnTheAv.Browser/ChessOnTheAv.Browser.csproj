@@ -10,7 +10,11 @@
     <PackageReference Include="Avalonia.Browser" />
   </ItemGroup>
 
+        <ItemGroup>
+            <ProjectReference Include="..\ChessOnTheAv\ChessOnTheAv.csproj" />
+        </ItemGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\ChessOnTheAv\ChessOnTheAv.csproj" />
+    <AvaloniaResource Include="wwwroot\Assets\ChessPieces\*.png" />
   </ItemGroup>
 </Project>

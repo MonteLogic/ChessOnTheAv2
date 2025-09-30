@@ -1,19 +1,10 @@
-﻿#if (CommunityToolkitChosen)
-using CommunityToolkit.Mvvm.ComponentModel;
-#endif
+﻿using ChessOnTheAv.ViewModels;
 
 namespace ChessOnTheAv.ViewModels;
 
-#if (CommunityToolkitChosen)
-public partial class MainViewModel : ViewModelBase
-#else
-public class MainViewModel : ViewModelBase
-#endif
+public class MainViewModel : ChessBoardViewModel
 {
-#if (CommunityToolkitChosen)
-    [ObservableProperty]
-    private string _greeting = "Welcome to Avalonia!";
-#else
-    public string Greeting { get; } = "Welcome to Avalonia!";
-#endif
+    public MainViewModel() : base()
+    {
+    }
 }

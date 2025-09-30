@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using ChessScrambler.Client.Utils;
+using ChessOnTheAv.Utils;
 
-namespace ChessScrambler.Client.Models
+namespace ChessOnTheAv.Models
 {
     public class GameBank
     {

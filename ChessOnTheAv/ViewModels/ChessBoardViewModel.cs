@@ -5,11 +5,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using ChessScrambler.Client.Models;
-using ChessScrambler.Client.Utils;
+using ChessOnTheAv.Models;
+using ChessOnTheAv.Utils;
 using ChessDotNet;
 
-namespace ChessScrambler.Client.ViewModels;
+namespace ChessOnTheAv.ViewModels;
 
 /**
  * <summary>

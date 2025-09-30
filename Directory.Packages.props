@@ -22,5 +22,6 @@
         <!--#endif -->
 
         <PackageVersion Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.15" />
+        <PackageVersion Include="ChessDotNet" Version="1.0.0" />
     </ItemGroup>
 </Project>

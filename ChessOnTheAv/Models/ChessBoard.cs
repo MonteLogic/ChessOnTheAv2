@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ChessDotNet;
-using ChessScrambler.Client.Utils;
+using ChessOnTheAv.Utils;
 
-namespace ChessScrambler.Client.Models
+namespace ChessOnTheAv.Models
 {
     public class Position
     {

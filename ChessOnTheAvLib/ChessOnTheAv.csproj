@@ -1,22 +1,46 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net9.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.3.6" />
-    <PackageReference Include="Avalonia.Desktop" Version="11.3.6" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.6" />
-    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.6" />
+    <PackageReference Include="Avalonia" />
+    <PackageReference Include="Avalonia.Themes.Fluent" />
+    <PackageReference Include="Avalonia.Fonts.Inter" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <PackageReference Include="Avalonia.Diagnostics" Version="11.3.6">
+    <PackageReference Include="Avalonia.Diagnostics">
       <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="ChessDotNet" />
   </ItemGroup>
+
+        <ItemGroup>
+            <!-- Exclude entire ChessScrambler.Client folder to avoid duplicate assembly attributes -->
+            <Compile Remove="ChessScrambler.Client\**" />
+            <EmbeddedResource Remove="ChessScrambler.Client\**" />
+            <None Remove="ChessScrambler.Client\**" />
+            <Compile Remove="ChessScrambler.Server\**" />
+            <EmbeddedResource Remove="ChessScrambler.Server\**" />
+            <None Remove="ChessScrambler.Server\**" />
+            <Compile Remove="TestChess\**" />
+            <EmbeddedResource Remove="TestChess\**" />
+            <None Remove="TestChess\**" />
+            <Compile Remove="test.cs" />
+            <EmbeddedResource Remove="test.cs" />
+            <None Remove="test.cs" />
+        </ItemGroup>
+        
+        <!-- Include only the specific files we need from ChessScrambler.Client -->
+        <ItemGroup>
+            <Compile Include="ChessScrambler.Client\Models\*.cs" />
+            <Compile Include="ChessScrambler.Client\ViewModels\*.cs" />
+            <Compile Include="ChessScrambler.Client\Converters\*.cs" />
+            <Compile Include="ChessScrambler.Client\Controls\*.cs" />
+            <Compile Include="ChessScrambler.Client\Utils\*.cs" />
+            <AvaloniaResource Include="ChessScrambler.Client\Assets\ChessPieces\*.png" />
+        </ItemGroup>
 </Project>
