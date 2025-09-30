@@ -12,6 +12,14 @@
         <vm:MainViewModel />
     </Design.DataContext>
 
+    <UserControl.Resources>
+        <converters:SquareColorConverter x:Key="SquareColorConverter"/>
+        <converters:PieceColorConverter x:Key="PieceColorConverter"/>
+        <converters:ChessPieceImageConverter x:Key="ChessPieceImageConverter"/>
+        <converters:BoardSizeDisplayConverter x:Key="BoardSizeDisplayConverter"/>
+        <converters:WindowSizeDisplayConverter x:Key="WindowSizeDisplayConverter"/>
+    </UserControl.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -74,7 +82,7 @@
                                         BorderBrush="Black" BorderThickness="1"
                                         PointerPressed="Square_PointerPressed">
                                     <Border.Background>
-                                        <SolidColorBrush Color="{Binding IsLightSquare, Converter={x:Static BoolConverters.Not}, ConverterParameter='#F0D9B5:#B58863'}"/>
+                                        <SolidColorBrush Color="{Binding IsLightSquare, Converter={StaticResource SquareColorConverter}}"/>
                                     </Border.Background>
                                     <TextBlock Text="{Binding Piece}" 
                                                HorizontalAlignment="Center" 

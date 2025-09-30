@@ -27,4 +27,5 @@
     <PackageReference Include="CommunityToolkit.Mvvm" />
     <PackageReference Include="ChessDotNet" />
   </ItemGroup>
+
 </Project>

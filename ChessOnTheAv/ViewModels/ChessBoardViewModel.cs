@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using ChessOnTheAv.Models;
 using ChessOnTheAv.Utils;
 using ChessDotNet;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ChessOnTheAv.ViewModels;
 
@@ -16,7 +17,7 @@ namespace ChessOnTheAv.ViewModels;
  * Represents a single square on the chess board with its visual state and properties.
  * </summary>
  */
-public class SquareViewModel : INotifyPropertyChanged
+public class SquareViewModel : ViewModelBase
 {
     private ChessPiece? _piece;
     private bool _isSelected;
@@ -88,25 +89,7 @@ public class SquareViewModel : INotifyPropertyChanged
      */
     public string Position => $"{(char)('a' + Column)}{8 - Row}";
 
-    /**
-     * <summary>
-     * Occurs when a property value changes.
-     * </summary>
-     */
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    /**
-     * <summary>
-     * Raises the PropertyChanged event for the specified property.
-     * </summary>
-     * <param name="propertyName">The name of the property that changed. If null, the caller member name is used.</param>
-     */
-    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+    protected new bool SetProperty<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
     {
         if (Equals(field, value)) return false;
         field = value;
@@ -120,7 +103,7 @@ public class SquareViewModel : INotifyPropertyChanged
  * ViewModel for the chess board that manages the game state, UI bindings, and user interactions.
  * </summary>
  */
-public class ChessBoardViewModel : INotifyPropertyChanged
+public class ChessBoardViewModel : ViewModelBase
 {
     private ChessBoard? _chessBoard;
     private SquareViewModel? _selectedSquare;
@@ -701,6 +684,10 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     {
         try
         {
+            if (_chessBoard == null)
+            {
+                return "Error: Chess board not initialized.";
+            }
             var debugState = _chessBoard.ExportDebugState();
             GameStatusText = "Debug state exported";
             return debugState;
@@ -1041,6 +1028,10 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 
     private void UpdateGameStatus()
     {
+        if (_chessBoard == null)
+        {
+            return;
+        }
         if (GameLogger.EnableGameLogging)
         {
             Console.WriteLine($"[GAME] UpdateGameStatus called - Current player: {_chessBoard.CurrentPlayer}");
@@ -1223,6 +1214,10 @@ public class ChessBoardViewModel : INotifyPropertyChanged
      */
     public void OnSquareClicked(SquareViewModel square)
     {
+        if (_chessBoard == null)
+        {
+            return;
+        }
         if (GameLogger.EnableGameLogging)
         {
             Console.WriteLine($"[GAME] Square clicked: Row={square.Row}, Col={square.Column}, Piece={square.Piece?.ToString() ?? "Empty"}");
@@ -1376,6 +1371,10 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 
     private void HighlightValidMoves(SquareViewModel fromSquare)
     {
+        if (_chessBoard == null)
+        {
+            return;
+        }
         var fromPosition = new Models.Position(fromSquare.Row, fromSquare.Column);
         if (GameLogger.EnableGameLogging)
         {
@@ -1402,7 +1401,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         }
     }
 
-        private ChessDotNet.Move ConvertAlgebraicToChessDotNet(string algebraicMove, IEnumerable<ChessDotNet.Move> validMoves)
+        private ChessDotNet.Move? ConvertAlgebraicToChessDotNet(string algebraicMove, IEnumerable<ChessDotNet.Move> validMoves)
         {
             if (string.IsNullOrEmpty(algebraicMove))
                 return null;
@@ -1413,7 +1412,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
                 var moveStr = move.ToString();
                 
                 // Convert ChessDotNet format (E2-E4) to algebraic (e4)
-                if (moveStr.Length >= 5 && moveStr[2] == '-')
+                if (moveStr != null && moveStr.Length >= 5 && moveStr[2] == '-')
                 {
                     var from = moveStr.Substring(0, 2).ToLower();
                     var to = moveStr.Substring(3, 2).ToLower();
@@ -1451,7 +1450,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
             return null;
         }
 
-        private string GetPieceTypeFromAlgebraic(string algebraicMove)
+        private string? GetPieceTypeFromAlgebraic(string algebraicMove)
         {
             if (string.IsNullOrEmpty(algebraicMove))
                 return null;
@@ -1544,23 +1543,6 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         }
     }
 
-    /**
-     * <summary>
-     * Occurs when a property value changes.
-     * </summary>
-     */
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    /**
-     * <summary>
-     * Raises the PropertyChanged event for the specified property.
-     * </summary>
-     * <param name="propertyName">The name of the property that changed. If null, the caller member name is used.</param>
-     */
-    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
 
     /**
      * <summary>
@@ -1572,7 +1554,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
      * <param name="propertyName">The name of the property. If null, the caller member name is used.</param>
      * <returns>True if the property value was changed; otherwise, false.</returns>
      */
-    protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+    protected new bool SetProperty<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
     {
         if (Equals(field, value)) return false;
         field = value;
