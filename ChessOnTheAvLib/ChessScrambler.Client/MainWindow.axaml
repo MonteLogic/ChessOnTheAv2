@@ -1,0 +1,392 @@
+
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:ChessScrambler.Client.ViewModels"
+        xmlns:converters="using:ChessScrambler.Client.Converters"
+        mc:Ignorable="d" d:DesignWidth="1400" d:DesignHeight="900"
+        x:Class="ChessScrambler.Client.MainWindow"
+        x:DataType="vm:ChessBoardViewModel"
+        Title="Chess Middlegame Practicer"
+        MinWidth="1200" MinHeight="800"
+        Width="1400" Height="900"
+        WindowStartupLocation="CenterScreen">
+    
+    <Window.Resources>
+        <converters:SquareColorConverter x:Key="SquareColorConverter"/>
+        <converters:PieceColorConverter x:Key="PieceColorConverter"/>
+        <converters:ChessPieceImageConverter x:Key="ChessPieceImageConverter"/>
+        <converters:BoardSizeDisplayConverter x:Key="BoardSizeDisplayConverter"/>
+        <converters:WindowSizeDisplayConverter x:Key="WindowSizeDisplayConverter"/>
+    </Window.Resources>
+
+    <Design.DataContext>
+        <vm:ChessBoardViewModel/>
+    </Design.DataContext>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="300"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Background="#2C2C2C" Padding="20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Column letters (a-h) at the top -->
+                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
+                    <TextBlock Text="a" Foreground="White" FontSize="18" FontWeight="Bold" Width="{Binding AppSettings.SquareSize}" HorizontalAlignment="Center"/>
+                    <TextBlock Text="b" Foreground="White" FontSize="18" FontWeight="Bold" Width="{Binding AppSettings.SquareSize}" HorizontalAlignment="Center"/>
+                    <TextBlock Text="c" Foreground="White" FontSize="18" FontWeight="Bold" Width="{Binding AppSettings.SquareSize}" HorizontalAlignment="Center"/>
+                    <TextBlock Text="d" Foreground="White" FontSize="18" FontWeight="Bold" Width="{Binding AppSettings.SquareSize}" HorizontalAlignment="Center"/>
+                    <TextBlock Text="e" Foreground="White" FontSize="18" FontWeight="Bold" Width="{Binding AppSettings.SquareSize}" HorizontalAlignment="Center"/>
+                    <TextBlock Text="f" Foreground="White" FontSize="18" FontWeight="Bold" Width="{Binding AppSettings.SquareSize}" HorizontalAlignment="Center"/>
+                    <TextBlock Text="g" Foreground="White" FontSize="18" FontWeight="Bold" Width="{Binding AppSettings.SquareSize}" HorizontalAlignment="Center"/>
+                    <TextBlock Text="h" Foreground="White" FontSize="18" FontWeight="Bold" Width="{Binding AppSettings.SquareSize}" HorizontalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- Row numbers (8-1) on the left side -->
+                <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <TextBlock Text="8" Foreground="White" FontSize="18" FontWeight="Bold" Height="{Binding AppSettings.SquareSize}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Text="7" Foreground="White" FontSize="18" FontWeight="Bold" Height="{Binding AppSettings.SquareSize}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Text="6" Foreground="White" FontSize="18" FontWeight="Bold" Height="{Binding AppSettings.SquareSize}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Text="5" Foreground="White" FontSize="18" FontWeight="Bold" Height="{Binding AppSettings.SquareSize}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Text="4" Foreground="White" FontSize="18" FontWeight="Bold" Height="{Binding AppSettings.SquareSize}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Text="3" Foreground="White" FontSize="18" FontWeight="Bold" Height="{Binding AppSettings.SquareSize}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Text="2" Foreground="White" FontSize="18" FontWeight="Bold" Height="{Binding AppSettings.SquareSize}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Text="1" Foreground="White" FontSize="18" FontWeight="Bold" Height="{Binding AppSettings.SquareSize}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- Chess board - configurable size -->
+                <Grid Grid.Row="1" Grid.Column="1" 
+                      Width="{Binding AppSettings.BoardSize}" 
+                      Height="{Binding AppSettings.BoardSize}" 
+                      HorizontalAlignment="Center" 
+                      VerticalAlignment="Center">
+                    <ItemsControl ItemsSource="{Binding Squares}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Rows="8" Columns="8"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:SquareViewModel">
+                                <Border Width="{Binding $parent[Window].DataContext.AppSettings.SquareSize}" 
+                                        Height="{Binding $parent[Window].DataContext.AppSettings.SquareSize}" 
+                                        BorderBrush="Black" BorderThickness="1"
+                                        PointerPressed="Square_PointerPressed">
+                                    <Border.Background>
+                                        <SolidColorBrush>
+                                            <SolidColorBrush.Color>
+                                                <MultiBinding Converter="{StaticResource SquareColorConverter}">
+                                                    <Binding Path="IsLightSquare"/>
+                                                    <Binding Path="IsSelected"/>
+                                                    <Binding Path="IsHighlighted"/>
+                                                </MultiBinding>
+                                            </SolidColorBrush.Color>
+                                        </SolidColorBrush>
+                                    </Border.Background>
+                                    <Image Source="{Binding Piece, Converter={StaticResource ChessPieceImageConverter}}" 
+                                           Width="{Binding $parent[Window].DataContext.AppSettings.PieceSize}" 
+                                           Height="{Binding $parent[Window].DataContext.AppSettings.PieceSize}"
+                                           HorizontalAlignment="Center" 
+                                           VerticalAlignment="Center"
+                                           RenderOptions.BitmapInterpolationMode="HighQuality"/>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+
+                <!-- Column letters (a-h) at the bottom -->
+                <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                    <TextBlock Text="a" Foreground="White" FontSize="18" FontWeight="Bold" Width="{Binding AppSettings.SquareSize}" HorizontalAlignment="Center"/>
+                    <TextBlock Text="b" Foreground="White" FontSize="18" FontWeight="Bold" Width="{Binding AppSettings.SquareSize}" HorizontalAlignment="Center"/>
+                    <TextBlock Text="c" Foreground="White" FontSize="18" FontWeight="Bold" Width="{Binding AppSettings.SquareSize}" HorizontalAlignment="Center"/>
+                    <TextBlock Text="d" Foreground="White" FontSize="18" FontWeight="Bold" Width="{Binding AppSettings.SquareSize}" HorizontalAlignment="Center"/>
+                    <TextBlock Text="e" Foreground="White" FontSize="18" FontWeight="Bold" Width="{Binding AppSettings.SquareSize}" HorizontalAlignment="Center"/>
+                    <TextBlock Text="f" Foreground="White" FontSize="18" FontWeight="Bold" Width="{Binding AppSettings.SquareSize}" HorizontalAlignment="Center"/>
+                    <TextBlock Text="g" Foreground="White" FontSize="18" FontWeight="Bold" Width="{Binding AppSettings.SquareSize}" HorizontalAlignment="Center"/>
+                    <TextBlock Text="h" Foreground="White" FontSize="18" FontWeight="Bold" Width="{Binding AppSettings.SquareSize}" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Border Grid.Column="1" Background="#1E1E1E" Padding="20">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel Spacing="20">
+                <Border Background="#333333" Padding="10" CornerRadius="5">
+                    <StackPanel>
+                        <TextBlock Text="Game Status" Foreground="White" FontWeight="Bold" FontSize="14" Margin="0,0,0,10"/>
+                        <StackPanel Spacing="5">
+                            <TextBlock Text="{Binding GameIdText}" Foreground="White" FontSize="12" FontStyle="Italic"/>
+                            <TextBlock Text="{Binding WhitePlayerText}" Foreground="White" FontSize="12"/>
+                            <TextBlock Text="{Binding BlackPlayerText}" Foreground="White" FontSize="12"/>
+                            <TextBlock Text="{Binding CurrentPlayerText}" Foreground="White" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding GameStatusText}" Foreground="White"/>
+                            <TextBlock Text="{Binding GamesBankStatus}" Foreground="White" FontSize="11" FontStyle="Italic" Margin="0,5,0,0"/>
+                        </StackPanel>
+                        <Separator Background="#555555" Margin="0,10,0,10"/>
+                        <StackPanel Spacing="5">
+                            <Button Content="Import PGN File" 
+                                    Background="#FF5722" 
+                                    Foreground="White" 
+                                    Padding="8,4"
+                                    FontSize="12"
+                                    Click="ImportPgnFile_Click"/>
+                            <Button Content="Export Current Game (PGN)" 
+                                    Background="#4CAF50" 
+                                    Foreground="White" 
+                                    Padding="8,4"
+                                    FontSize="12"
+                                    Click="ExportCurrentGamePgn_Click"/>
+                            <Button Content="Clear Games Bank" 
+                                    Background="#795548" 
+                                    Foreground="White" 
+                                    Padding="8,4"
+                                    FontSize="12"
+                                    Click="ClearGamesBank_Click"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="#333333" Padding="10" CornerRadius="5">
+                    <StackPanel>
+                        <TextBlock Text="Controls" Foreground="White" FontWeight="Bold" FontSize="14" Margin="0,0,0,10"/>
+                        <StackPanel Spacing="10">
+                            <Button Content="New Game Position" 
+                                    Background="#4CAF50" 
+                                    Foreground="White" 
+                                    Padding="10,5"
+                                    Click="NewPosition_Click"/>
+                            <Button Content="Reset Board" 
+                                    Background="#FF9800" 
+                                    Foreground="White" 
+                                    Padding="10,5"
+                                    Click="ResetBoard_Click"/>
+                            <Button Content="Hint" 
+                                    Background="#2196F3" 
+                                    Foreground="White" 
+                                    Padding="10,5"
+                                    Click="Hint_Click"/>
+                            <Button Content="Export Debug State" 
+                                    Background="#9C27B0" 
+                                    Foreground="White" 
+                                    Padding="10,5"
+                                    Click="ExportDebug_Click"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="#333333" Padding="10" CornerRadius="5">
+                    <StackPanel>
+                        <TextBlock Text="Display Settings" Foreground="White" FontWeight="Bold" FontSize="14" Margin="0,0,0,10"/>
+                        <StackPanel Spacing="15">
+                            <!-- Board Size Settings -->
+                            <StackPanel Spacing="10">
+                                <TextBlock Text="Board Size:" Foreground="White" FontSize="12"/>
+                                <ComboBox ItemsSource="{Binding AppSettings.AvailableBoardSizes}"
+                                          SelectedItem="{Binding AppSettings.BoardSize}"
+                                          Background="#2C2C2C"
+                                          Foreground="White"
+                                          BorderBrush="#555555"
+                                          Padding="5">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Converter={StaticResource BoardSizeDisplayConverter}}"/>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                                <TextBlock Text="{Binding AppSettings.BoardSize, StringFormat='Current Size: {0}px'}" 
+                                           Foreground="#AAAAAA" FontSize="10" FontStyle="Italic"/>
+                            </StackPanel>
+                            
+                            <!-- Window Size Settings -->
+                            <StackPanel Spacing="10">
+                                <TextBlock Text="Window Size:" Foreground="White" FontSize="12"/>
+                                <ComboBox ItemsSource="{Binding AppSettings.AvailableWindowSizeModes}"
+                                          SelectedItem="{Binding AppSettings.WindowSizeMode}"
+                                          Background="#2C2C2C"
+                                          Foreground="White"
+                                          BorderBrush="#555555"
+                                          Padding="5">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Converter={StaticResource WindowSizeDisplayConverter}}"/>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                                <TextBlock Text="{Binding AppSettings.WindowSizeMode, StringFormat='Current Mode: {0}'}" 
+                                           Foreground="#AAAAAA" FontSize="10" FontStyle="Italic"/>
+                            </StackPanel>
+                            
+                            <!-- Settings Actions -->
+                            <StackPanel Spacing="10" Margin="0,10,0,0">
+                                <StackPanel Orientation="Horizontal" Spacing="10">
+                                    <Button Content="Save Settings" 
+                                            Background="#4CAF50" 
+                                            Foreground="White" 
+                                            Padding="8,4"
+                                            FontSize="12"
+                                            Click="SaveSettings_Click"/>
+                                    <Button Content="Reset to Defaults" 
+                                            Background="#FF5722" 
+                                            Foreground="White" 
+                                            Padding="8,4"
+                                            FontSize="12"
+                                            Click="ResetSettings_Click"/>
+                                </StackPanel>
+                                <TextBlock Text="Settings are automatically saved when changed" 
+                                           Foreground="#AAAAAA" FontSize="10" FontStyle="Italic"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="#333333" Padding="10" CornerRadius="5">
+                    <StackPanel>
+                        <TextBlock Text="Move Navigation" Foreground="White" FontWeight="Bold" FontSize="14" Margin="0,0,0,10"/>
+                        <StackPanel Spacing="5">
+                            <TextBlock Text="{Binding MoveNavigationText}" Foreground="White" FontSize="12" HorizontalAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="5">
+                                <Button Content="⏮" 
+                                        Background="#666666" 
+                                        Foreground="White" 
+                                        Padding="8,5"
+                                        IsEnabled="{Binding CanGoBack}"
+                                        Click="GoToFirstMove_Click"/>
+                                <Button Content="⏪" 
+                                        Background="#666666" 
+                                        Foreground="White" 
+                                        Padding="8,5"
+                                        IsEnabled="{Binding CanGoBack}"
+                                        Click="GoToPreviousMove_Click"/>
+                                <Button Content="⏩" 
+                                        Background="#666666" 
+                                        Foreground="White" 
+                                        Padding="8,5"
+                                        IsEnabled="{Binding CanGoForward}"
+                                        Click="GoToNextMove_Click"/>
+                                <Button Content="⏭" 
+                                        Background="#666666" 
+                                        Foreground="White" 
+                                        Padding="8,5"
+                                        IsEnabled="{Binding CanGoForward}"
+                                        Click="GoToLastMove_Click"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="#333333" Padding="10" CornerRadius="5">
+                    <StackPanel>
+                        <TextBlock Text="Move History" Foreground="White" FontWeight="Bold" FontSize="14" Margin="0,0,0,10"/>
+                        <ScrollViewer Height="200" VerticalScrollBarVisibility="Auto">
+                            <SelectableTextBlock Text="{Binding MoveHistoryText}"
+                                                 Foreground="White"
+                                                 Background="Transparent"
+                                                 TextWrapping="Wrap"
+                                                 SelectionBrush="#55FFFFFF" 
+                                                 Padding="0"/>
+                        </ScrollViewer>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="#333333" Padding="10" CornerRadius="5">
+                    <StackPanel>
+                        <TextBlock Text="Current Position (FEN)" Foreground="White" FontWeight="Bold" FontSize="14" Margin="0,0,0,10"/>
+                        <SelectableTextBlock Text="{Binding CurrentFenPosition}"
+                                             Foreground="White"
+                                             Background="#1E1E1E"
+                                             TextWrapping="Wrap"
+                                             SelectionBrush="#55FFFFFF" 
+                                             Padding="8"
+                                             FontFamily="Consolas, Courier New, monospace"
+                                             FontSize="12"/>
+                        <TextBlock Text="FEN (Forsyth-Edwards Notation) describes the current board position" 
+                                   Foreground="#AAAAAA" 
+                                   FontSize="10" 
+                                   FontStyle="Italic" 
+                                   Margin="0,5,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="#333333" Padding="10" CornerRadius="5">
+                    <StackPanel>
+                        <TextBlock Text="Instructions" Foreground="White" FontWeight="Bold" FontSize="14" Margin="0,0,0,10"/>
+                        <TextBox IsReadOnly="True"
+                                 Foreground="White" 
+                                 TextWrapping="Wrap"
+                                 Height="150"
+                                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 Padding="0"
+                                 Text="• Click on a piece to select it&#x0A;• Click on a highlighted square to move&#x0A;• Practice middlegame tactics and strategy&#x0A;• Look for tactical opportunities&#x0A;• Plan your moves carefully"
+                                 GotFocus="Instructions_GotFocus"
+                                 LostFocus="Instructions_LostFocus"
+                                 KeyDown="Instructions_KeyDown"/>
+                    </StackPanel>
+                </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <!-- Game End Popup Dialog -->
+        <Border IsVisible="{Binding ShowGameEndPopup}"
+                Background="#80000000"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                ZIndex="1000"
+                Grid.ColumnSpan="2">
+            <Border Background="#2C2C2C"
+                    BorderBrush="#4CAF50"
+                    BorderThickness="3"
+                    CornerRadius="10"
+                    Padding="30"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    MinWidth="400"
+                    MaxWidth="600">
+                <StackPanel Spacing="20" HorizontalAlignment="Center">
+                    <TextBlock Text="{Binding GameEndMessage}"
+                               Foreground="White"
+                               FontSize="24"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Center"
+                               TextWrapping="Wrap"
+                               TextAlignment="Center"/>
+                    
+                    <StackPanel Orientation="Horizontal" 
+                                HorizontalAlignment="Center" 
+                                Spacing="15">
+                        <Button Content="New Game"
+                                Background="#4CAF50"
+                                Foreground="White"
+                                Padding="15,10"
+                                FontSize="16"
+                                FontWeight="Bold"
+                                Click="NewGame_Click"/>
+                        <Button Content="Close"
+                                Background="#666666"
+                                Foreground="White"
+                                Padding="15,10"
+                                FontSize="16"
+                                FontWeight="Bold"
+                                Click="ClosePopup_Click"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Border>
+    </Grid>
+</Window>
