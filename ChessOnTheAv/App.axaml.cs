@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
+using System;
 #if (CommunityToolkitChosen)
 using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
@@ -20,8 +21,12 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        Console.WriteLine("=== APP INITIALIZATION DEBUG ===");
+        Console.WriteLine($"ApplicationLifetime type: {ApplicationLifetime?.GetType().Name}");
+        
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
+            Console.WriteLine("Using desktop application lifetime");
 #if (CommunityToolkitChosen)
             // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
             // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
@@ -31,17 +36,34 @@ public partial class App : Application
             {
                 DataContext = new MainViewModel()
             };
+            Console.WriteLine("Desktop MainWindow created");
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
+            Console.WriteLine("Using single view application lifetime (WASM)");
             // Use MainView directly for WASM
-            singleViewPlatform.MainView = new MainView
+            try
             {
-                DataContext = new MainViewModel()
-            };
+                var mainView = new MainView();
+                var viewModel = new MainViewModel();
+                mainView.DataContext = viewModel;
+                singleViewPlatform.MainView = mainView;
+                Console.WriteLine("Single view MainView created successfully");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ERROR creating MainView: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                throw;
+            }
+        }
+        else
+        {
+            Console.WriteLine($"WARNING: Unknown application lifetime type: {ApplicationLifetime?.GetType().Name}");
         }
 
         base.OnFrameworkInitializationCompleted();
+        Console.WriteLine("App initialization completed");
     }
 
 #if (CommunityToolkitChosen)
