@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WASM Test</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 4px; font-weight: bold; }
+        .loading { background-color: #e3f2fd; color: #1976d2; }
+        .success { background-color: #e8f5e8; color: #2e7d32; }
+        .error { background-color: #ffebee; color: #c62828; }
+        #log { background: #f5f5f5; border: 1px solid #ddd; padding: 10px; margin-top: 20px; font-family: monospace; font-size: 12px; max-height: 300px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+    <h1>.NET WASM Test</h1>
+    <div id="status" class="status loading">Initializing...</div>
+    <div id="log"></div>
+
+    <script>
+        function log(message) {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `[${timestamp}] ${message}<br>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(message);
+        }
+
+        function updateStatus(message, type = 'loading') {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+            log(`STATUS: ${message}`);
+        }
+
+        async function testWasm() {
+            try {
+                updateStatus("Testing .NET WASM loading...");
+                
+                // Test 1: Check if dotnet.js exists
+                log("Testing dotnet.js availability...");
+                const response = await fetch('./_framework/dotnet.js');
+                if (!response.ok) {
+                    throw new Error(`Failed to load dotnet.js: ${response.status}`);
+                }
+                log("✓ dotnet.js loaded successfully");
+                
+                // Test 2: Import dotnet module
+                log("Importing dotnet module...");
+                const { dotnet } = await import('./_framework/dotnet.js');
+                log("✓ dotnet module imported successfully");
+                
+                // Test 3: Create runtime
+                log("Creating .NET runtime...");
+                const runtime = await dotnet
+                    .withDiagnosticTracing(false)
+                    .create();
+                log("✓ .NET runtime created successfully");
+                
+                // Test 4: Get config
+                log("Getting runtime configuration...");
+                const config = runtime.getConfig();
+                log(`✓ Runtime config: ${JSON.stringify(config, null, 2)}`);
+                
+                updateStatus("All tests passed! .NET WASM is working!", 'success');
+                
+            } catch (error) {
+                log(`ERROR: ${error.message}`);
+                updateStatus(`Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Start the test
+        testWasm();
+    </script>
+</body>
+</html>

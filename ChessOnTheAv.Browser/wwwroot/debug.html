@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chess Debug - Visual Testing</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .status { padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
+        .error { background-color: #ffebee; border-color: #f44336; }
+        .success { background-color: #e8f5e8; border-color: #4caf50; }
+        .info { background-color: #e3f2fd; border-color: #2196f3; }
+        #console-output { background: #f5f5f5; padding: 10px; border: 1px solid #ddd; height: 300px; overflow-y: auto; font-family: monospace; }
+        .test-button { padding: 10px 20px; margin: 5px; background: #2196f3; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .test-button:hover { background: #1976d2; }
+    </style>
+</head>
+<body>
+    <h1>Chess Application Debug Console</h1>
+    
+    <div class="status info">
+        <h3>Current Status</h3>
+        <div id="current-status">Initializing...</div>
+    </div>
+    
+    <div class="status">
+        <h3>Test Controls</h3>
+        <button class="test-button" onclick="testDotNetImport()">Test .NET Import</button>
+        <button class="test-button" onclick="testAvaloniaApp()">Test Avalonia App</button>
+        <button class="test-button" onclick="clearConsole()">Clear Console</button>
+    </div>
+    
+    <div class="status">
+        <h3>Console Output</h3>
+        <div id="console-output"></div>
+    </div>
+    
+    <div class="status">
+        <h3>Page Source Check</h3>
+        <div id="page-source-info">Loading...</div>
+    </div>
+
+    <script>
+        // Enhanced console logging
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+        
+        function logToDiv(message, type = 'log') {
+            const output = document.getElementById('console-output');
+            const timestamp = new Date().toLocaleTimeString();
+            const div = document.createElement('div');
+            div.style.color = type === 'error' ? 'red' : type === 'warn' ? 'orange' : 'black';
+            div.textContent = `[${timestamp}] [${type.toUpperCase()}] ${message}`;
+            output.appendChild(div);
+            output.scrollTop = output.scrollHeight;
+        }
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            logToDiv(args.join(' '), 'log');
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            logToDiv(args.join(' '), 'error');
+        };
+        
+        console.warn = function(...args) {
+            originalWarn.apply(console, args);
+            logToDiv(args.join(' '), 'warn');
+        };
+        
+        function updateStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('current-status');
+            statusDiv.textContent = message;
+            statusDiv.className = type;
+            console.log(`[STATUS] ${message}`);
+        }
+        
+        function clearConsole() {
+            document.getElementById('console-output').innerHTML = '';
+        }
+        
+        async function testDotNetImport() {
+            updateStatus('Testing .NET import...', 'info');
+            try {
+                const { dotnet } = await import('./_framework/dotnet.js');
+                updateStatus('✅ .NET import successful', 'success');
+                console.log('DotNet object:', dotnet);
+            } catch (error) {
+                updateStatus('❌ .NET import failed: ' + error.message, 'error');
+                console.error('DotNet import error:', error);
+            }
+        }
+        
+        async function testAvaloniaApp() {
+            updateStatus('Testing Avalonia app startup...', 'info');
+            try {
+                const { dotnet } = await import('./_framework/dotnet.js');
+                const runtime = await dotnet.create();
+                const config = runtime.getConfig();
+                updateStatus('✅ Avalonia runtime created', 'success');
+                console.log('Runtime config:', config);
+                
+                // Try to start the app
+                await runtime.runMain(config.mainAssemblyName, [window.location.href]);
+                updateStatus('✅ Avalonia app started successfully!', 'success');
+            } catch (error) {
+                updateStatus('❌ Avalonia app failed: ' + error.message, 'error');
+                console.error('Avalonia startup error:', error);
+            }
+        }
+        
+        // Check page source
+        function checkPageSource() {
+            const mainPage = window.open('http://localhost:5235', '_blank');
+            if (mainPage) {
+                mainPage.onload = function() {
+                    const source = mainPage.document.documentElement.outerHTML;
+                    const hasChessBoard = source.includes('ItemsControl') || source.includes('ChessBoard');
+                    const hasSplash = source.includes('avalonia-splash');
+                    
+                    document.getElementById('page-source-info').innerHTML = `
+                        <div>Has Chess Board Elements: ${hasChessBoard ? '✅ Yes' : '❌ No'}</div>
+                        <div>Has Splash Screen: ${hasSplash ? '✅ Yes' : '❌ No'}</div>
+                        <div>Page Title: ${mainPage.document.title}</div>
+                    `;
+                };
+            }
+        }
+        
+        // Initialize
+        updateStatus('Debug console ready', 'success');
+        console.log('Debug console initialized');
+        
+        // Auto-check page source after 2 seconds
+        setTimeout(checkPageSource, 2000);
+    </script>
+</body>
+</html>

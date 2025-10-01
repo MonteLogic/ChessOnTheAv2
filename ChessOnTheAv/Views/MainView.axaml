@@ -84,11 +84,11 @@
                                     <Border.Background>
                                         <SolidColorBrush Color="{Binding IsLightSquare, Converter={StaticResource SquareColorConverter}}"/>
                                     </Border.Background>
-                                    <TextBlock Text="{Binding Piece}" 
-                                               HorizontalAlignment="Center" 
-                                               VerticalAlignment="Center"
-                                               FontSize="24"
-                                               Foreground="White"/>
+                                    <Image Source="{Binding Piece, Converter={StaticResource ChessPieceImageConverter}}"
+                                           Width="50"
+                                           Height="50"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
                                 </Border>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>

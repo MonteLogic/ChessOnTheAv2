@@ -1,20 +1,144 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <title>ChessOnTheAv</title>
+    <title>ChessOnTheAv - .NET WASM Test</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./app.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .status.loading { background-color: #e3f2fd; color: #1976d2; }
+        .status.success { background-color: #e8f5e8; color: #2e7d32; }
+        .status.error { background-color: #ffebee; color: #c62828; }
+        #console-log {
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
 </head>
-
-<body style="margin: 0; overflow: hidden">
-<div id="out">
-    <div class="avalonia-splash">
-        <h2>Chess</h2>
+<body>
+    <div class="container">
+        <h1>ChessOnTheAv - .NET WASM Test</h1>
+        <div id="status" class="status loading">Initializing...</div>
+        <div id="details"></div>
+        <div id="console-log"></div>
     </div>
-</div>
-<script type='module' src="./main.js"></script>
-</body>
 
+    <script>
+        // Console logging setup
+        (function () {
+            var old = console.log;
+            var oldError = console.error;
+            var logger = document.getElementById('console-log');
+            
+            function logToPage(level, message) {
+                var timestamp = new Date().toLocaleTimeString();
+                var logEntry = `[${timestamp}] [${level}] ${message}`;
+                logger.innerHTML += logEntry + '<br />';
+                logger.scrollTop = logger.scrollHeight;
+            }
+            
+            console.log = function (message) {
+                old(message);
+                logToPage('INFO', typeof message === 'object' ? JSON.stringify(message) : message);
+            }
+            
+            console.error = function (message) {
+                oldError(message);
+                logToPage('ERROR', typeof message === 'object' ? JSON.stringify(message) : message);
+            }
+        })();
+
+        // Status and error handling
+        function updateStatus(message, type = 'loading') {
+            const statusDiv = document.getElementById('status');
+            const detailsDiv = document.getElementById('details');
+            
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+            
+            console.log(`[STATUS] ${message}`);
+        }
+
+        function showError(error) {
+            console.error('[ERROR]', error);
+            updateStatus(`Error: ${error.message || error}`, 'error');
+            
+            const detailsDiv = document.getElementById('details');
+            detailsDiv.innerHTML = `
+                <h3>Error Details:</h3>
+                <pre>${error.stack || error.toString()}</pre>
+            `;
+        }
+
+        // Check if we're in a browser
+        if (typeof window === "undefined") {
+            showError(new Error("Expected to be running in a browser"));
+        } else {
+            console.log("Browser environment detected");
+            updateStatus("Browser environment OK, starting .NET WASM...");
+            
+            // Try to load the .NET runtime
+            loadDotNetWasm();
+        }
+
+        async function loadDotNetWasm() {
+            try {
+                updateStatus("Loading .NET runtime...");
+                
+                // Check if the dotnet.js file exists
+                const response = await fetch('./_framework/dotnet.js');
+                if (!response.ok) {
+                    throw new Error(`Failed to load dotnet.js: ${response.status} ${response.statusText}`);
+                }
+                
+                console.log("dotnet.js found, importing...");
+                const { dotnet } = await import('./_framework/dotnet.js');
+                
+                updateStatus("Creating .NET runtime...");
+                const dotnetRuntime = await dotnet
+                    .withDiagnosticTracing(false)
+                    .withApplicationArgumentsFromQuery()
+                    .create();
+
+                updateStatus("Getting runtime configuration...");
+                const config = dotnetRuntime.getConfig();
+                console.log("Runtime config:", config);
+
+                updateStatus("Starting main application...");
+                await dotnetRuntime.runMain(config.mainAssemblyName, [globalThis.location.href]);
+                
+                updateStatus("Application started successfully!", 'success');
+                console.log("Application started successfully!");
+                
+            } catch (error) {
+                showError(error);
+            }
+        }
+    </script>
+</body>
 </html>

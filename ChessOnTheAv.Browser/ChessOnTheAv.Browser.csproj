@@ -12,11 +12,12 @@
     <PackageReference Include="Avalonia.Fonts.Inter" />
   </ItemGroup>
 
-        <ItemGroup>
-            <ProjectReference Include="..\ChessOnTheAv\ChessOnTheAv.csproj" />
-        </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ChessOnTheAv\ChessOnTheAv.csproj" />
+  </ItemGroup>
 
   <ItemGroup>
     <AvaloniaResource Include="wwwroot\Assets\ChessPieces\*.png" />
   </ItemGroup>
+
 </Project>

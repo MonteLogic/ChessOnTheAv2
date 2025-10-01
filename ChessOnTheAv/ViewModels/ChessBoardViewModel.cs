@@ -326,15 +326,21 @@ public class ChessBoardViewModel : ViewModelBase
      */
     public ChessBoardViewModel()
     {
+        Console.WriteLine("[ViewModel] ChessBoardViewModel constructor started.");
         _whitePlayerText = "White: Loading...";
         _blackPlayerText = "Black: Loading...";
         _currentGameMoves = new List<string>();
         _currentGamePosition = 0;
         _appSettings = AppSettings.LoadSettings(); // Load saved settings
+        Console.WriteLine("[ViewModel] AppSettings loaded.");
         InitializeBoard();
+        Console.WriteLine("[ViewModel] Board initialized.");
         LoadSampleGames();
+        Console.WriteLine("[ViewModel] Sample games loaded.");
         LoadMiddlegamePosition();
+        Console.WriteLine("[ViewModel] Middlegame position loaded.");
         UpdateGamesBankStatus();
+        Console.WriteLine("[ViewModel] Games bank status updated.");
     }
 
     private void InitializeBoard()
@@ -359,44 +365,31 @@ public class ChessBoardViewModel : ViewModelBase
     {
         try
         {
-            // Try multiple possible locations for the sample games file
-            var possiblePaths = new[]
-            {
-                System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "sample_games.pgn"),
-                System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "sample_games.pgn"),
-                "sample_games.pgn"
-            };
+            var assembly = typeof(ChessBoardViewModel).Assembly;
+            var resourceName = "ChessOnTheAv.sample_games.pgn";
 
-            string? sampleGamesPath = null;
-            foreach (var path in possiblePaths)
+            using (var stream = assembly.GetManifestResourceStream(resourceName))
             {
-                if (System.IO.File.Exists(path))
+                if (stream != null)
                 {
-                    sampleGamesPath = path;
-                    break;
+                    using (var reader = new System.IO.StreamReader(stream))
+                    {
+                        var pgnContent = reader.ReadToEnd();
+                        GameBank.ImportGamesFromPgn(pgnContent);
+
+                        if (GameLogger.EnableGameLogging)
+                        {
+                            var count = GameBank.GetImportedGamesCount();
+                            Console.WriteLine($"[GAME] Successfully loaded {count} sample games from embedded resource.");
+                        }
+                    }
                 }
-            }
-
-            if (sampleGamesPath != null)
-            {
-                if (GameLogger.EnableGameLogging)
+                else
                 {
-                    Console.WriteLine($"[GAME] Loading sample games from: {sampleGamesPath}");
-                }
-
-                GameBank.ImportGamesFromFile(sampleGamesPath);
-                var count = GameBank.GetImportedGamesCount();
-
-                if (GameLogger.EnableGameLogging)
-                {
-                    Console.WriteLine($"[GAME] Successfully loaded {count} sample games");
-                }
-            }
-            else
-            {
-                if (GameLogger.EnableGameLogging)
-                {
-                    Console.WriteLine($"[GAME] Sample games file not found in any of the expected locations");
+                    if (GameLogger.EnableGameLogging)
+                    {
+                        Console.WriteLine($"[GAME] Embedded resource '{resourceName}' not found.");
+                    }
                 }
             }
         }
@@ -404,7 +397,7 @@ public class ChessBoardViewModel : ViewModelBase
         {
             if (GameLogger.EnableGameLogging)
             {
-                Console.WriteLine($"[GAME] Error loading sample games: {ex.Message}");
+                Console.WriteLine($"[GAME] Error loading sample games from embedded resource: {ex.Message}");
             }
         }
     }

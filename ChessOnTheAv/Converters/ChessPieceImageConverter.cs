@@ -22,12 +22,23 @@ public class ChessPieceImageConverter : IValueConverter
                 // Get the resource name for the piece
                 var resourceName = GetResourceName(piece);
                 
-                // Load the Avalonia resource
-                var uri = new Uri($"avares://ChessScrambler.Client/Assets/ChessPieces/{resourceName}");
-                return new Bitmap(AssetLoader.Open(uri));
+                // Try to load from wwwroot first (for browser), then fallback to avares
+                try
+                {
+                    var wwwrootUri = new Uri($"avares://ChessOnTheAv/wwwroot/Assets/ChessPieces/{resourceName}");
+                    return new Bitmap(AssetLoader.Open(wwwrootUri));
+                }
+                catch
+                {
+                    // Fallback to Assets folder
+                    var uri = new Uri($"avares://ChessOnTheAv/Assets/ChessPieces/{resourceName}");
+                    return new Bitmap(AssetLoader.Open(uri));
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                // Log the error for debugging
+                Console.WriteLine($"[ERROR] Failed to load chess piece image: {ex.Message}");
                 // Fallback to null if image loading fails
                 return null;
             }
